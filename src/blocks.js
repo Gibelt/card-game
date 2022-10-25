@@ -9,6 +9,15 @@ function difficultyBlock(container) {
     const level = document.createElement('div');
     level.classList.add('difficulty__level');
 
+    level.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!target.dataset.value) {
+            return;
+        }
+        application.difficulty = target.dataset.value;
+        application.renderScreen('game-screen');
+    });
+
     for (let i = 1; i < 4; i++) {
         const number = document.createElement('div');
         number.textContent = i;

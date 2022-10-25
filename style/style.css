@@ -11,8 +11,6 @@
 
 .app {
     background: #004980;
-    padding-top: 158px;
-    padding-bottom: 158px;
     display: flex;
     justify-content: center;
 }
@@ -20,6 +18,8 @@
 .difficulty__content {
     background: #C2F5FF;
     border-radius: 12px;
+    margin-top: 158px;
+    margin-bottom: 158px;
     padding-left: 69px;
     padding-right: 69px;
     padding-top: 52px;
