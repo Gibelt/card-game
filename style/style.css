@@ -60,6 +60,10 @@
     cursor: default;
 }
 
+.difficulty__level__item_disabled {
+    color: gray;
+}
+
 .difficulty__level__item:hover {
     box-shadow: 0 0 16px 2px #74767d99;
     transform: scale(1.01);

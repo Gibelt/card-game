@@ -15,7 +15,14 @@ function difficultyBlock(container) {
             return;
         }
         application.difficulty = target.dataset.value;
-        application.renderScreen('game-screen');
+        const levels = document.querySelectorAll('.difficulty__level__item');
+        levels.forEach(level => {
+            if (level.dataset.value === application.difficulty) {
+                level.classList.remove('difficulty__level__item_disabled');
+            } else {
+                level.classList.add('difficulty__level__item_disabled');
+            }
+        });
     });
 
     for (let i = 1; i < 4; i++) {
@@ -29,6 +36,10 @@ function difficultyBlock(container) {
     const button = document.createElement('button');
     button.textContent = 'Старт';
     button.classList.add('difficulty__button');
+
+    button.addEventListener('click', () => {
+        application.renderScreen('game-screen');
+    });
 
     content.appendChild(heading);
     content.appendChild(level);
