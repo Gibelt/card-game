@@ -23,6 +23,7 @@ function difficultyBlock(container) {
         level.classList.add("difficulty__level__item_disabled");
       }
     });
+    button.removeAttribute("disabled");
   });
 
   for (let i = 1; i < 4; i++) {
@@ -36,6 +37,7 @@ function difficultyBlock(container) {
   const button = document.createElement("button");
   button.textContent = "Старт";
   button.classList.add("difficulty__button");
+  button.setAttribute("disabled", "disabled");
 
   button.addEventListener("click", () => {
     window.application.renderScreen("game-screen");
@@ -52,7 +54,7 @@ function cardBlock(container) {
   for (let i = 0; i < 36; i++) {
     const img = document.createElement("img");
     img.classList.add("card__item");
-    img.setAttribute("src", "src/img/back-of-card.jpg");
+    img.setAttribute("src", "static/back-of-card.jpg");
     img.setAttribute("data-value", CARDS[i]);
     container.appendChild(img);
   }

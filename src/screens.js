@@ -24,7 +24,7 @@ function renderGameScreen() {
     if (!target.dataset.value) {
       return;
     }
-    target.setAttribute("src", "src/img/" + target.dataset.value + ".jpg");
+    target.setAttribute("src", "static/" + target.dataset.value + ".jpg");
   });
 
   window.application.renderBlock("card", cards);
