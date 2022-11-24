@@ -40,6 +40,14 @@ window.application = {
   \***********************/
 /***/ (() => {
 
+function resultBlock(container, result) {
+  const content = document.createElement("div");
+  content.classList.add("result__content");
+
+  const img = document.createElement("img");
+  
+}
+
 function difficultyBlock(container) {
   const content = document.createElement("div");
   content.classList.add("difficulty__content");
@@ -93,13 +101,27 @@ function difficultyBlock(container) {
 }
 
 function cardBlock(container) {
-  for (let i = 0; i < 36; i++) {
+  shuffle(CARDS);
+  let randomArr = CARDS.slice(0, window.application.difficulty * 3);
+  let gameArr = randomArr.concat(randomArr);
+  shuffle(gameArr);
+
+  for (let i = 0; i < gameArr.length; i++) {
     const img = document.createElement("img");
     img.classList.add("card__item");
-    img.setAttribute("src", "static/back-of-card.jpg");
-    img.setAttribute("data-value", CARDS[i]);
+    img.setAttribute("src", "static/" + gameArr[i] + ".jpg");
+    img.setAttribute("data-value", gameArr[i]);
     container.appendChild(img);
   }
+
+  setTimeout(cardBack, 2000);
+}
+
+function cardBack() {
+  const cards = document.querySelectorAll(".card__item");
+  cards.forEach((card) => {
+    card.setAttribute("src", "static/back-of-card.jpg");
+  });
 }
 
 function gameTopBlock(container) {
@@ -133,9 +155,14 @@ function gameTopBlock(container) {
 window.application.blocks["difficulty"] = difficultyBlock;
 window.application.blocks["card"] = cardBlock;
 window.application.blocks["game-top"] = gameTopBlock;
+window.application.blocks["result"] = resultBlock;
 
 // eslint-disable-next-line prettier/prettier
 const CARDS = ["sa", "sk", "sq", "sj", "s10", "s9", "s8", "s7", "s6","ha", "hk", "hq", "hj", "h10", "h9", "h8", "h7", "h6", "da", "dk", "dq", "dj", "d10", "d9", "d8", "d7", "d6", "ca", "ck", "cq", "cj", "c10", "c9", "c8", "c7", "c6"];
+
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+}
 
 
 /***/ }),
@@ -164,6 +191,9 @@ function renderDifficultyScreen() {
 }
 
 function renderGameScreen() {
+  let counter = 0;
+  let userChoosenCard = "";
+  let userChoosenCardSecond = "";
   const app = document.querySelector(".app");
   app.innerHTML = "";
 
@@ -184,6 +214,15 @@ function renderGameScreen() {
       return;
     }
     target.setAttribute("src", "static/" + target.dataset.value + ".jpg");
+    if (counter === 0) {
+      userChoosenCard = target.dataset.value;
+    } else if (counter === 1) {
+      userChoosenCardSecond = target.dataset.value;
+      userChoosenCard === userChoosenCardSecond ? renderSucces() : renderLoose();
+      counter = 0;
+      userChoosenCard = "";
+      userChoosenCardSecond = "";
+    }
   });
 
   window.application.renderBlock("card", cards);
@@ -191,6 +230,10 @@ function renderGameScreen() {
   content.appendChild(top);
   content.appendChild(cards);
   app.appendChild(content);
+}
+
+function render() {
+
 }
 
 window.application.screens["difficulty-screen"] = renderDifficultyScreen;

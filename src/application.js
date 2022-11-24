@@ -4,7 +4,7 @@ window.application = {
   renderScreen: function (screenName) {
     window.application.screens[screenName]();
   },
-  renderBlock: function (blockName, container) {
-    window.application.blocks[blockName](container);
+  renderBlock: function (blockName, container, result) {
+    window.application.blocks[blockName](container, result);
   },
 };

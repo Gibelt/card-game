@@ -5,6 +5,9 @@ function renderDifficultyScreen() {
 }
 
 function renderGameScreen() {
+  let counter = 0;
+  let userChoosenCard = "";
+  let userChoosenCardSecond = "";
   const app = document.querySelector(".app");
   app.innerHTML = "";
 
@@ -21,10 +24,28 @@ function renderGameScreen() {
 
   cards.addEventListener("click", (event) => {
     const target = event.target;
-    if (!target.dataset.value) {
+    if (
+      !target.dataset.value ||
+      target.dataset.value === "x" ||
+      target.getAttribute("disabled")
+    ) {
       return;
     }
     target.setAttribute("src", "static/" + target.dataset.value + ".jpg");
+    if (counter === 0) {
+      userChoosenCard = target.dataset.value;
+      target.dataset.value = "x";
+      counter++;
+    } else if (counter === 1) {
+      userChoosenCardSecond = target.dataset.value;
+      userChoosenCard === userChoosenCardSecond
+        ? window.application.renderBlock("result", app, "success")
+        : window.application.renderBlock("result", app, "loose");
+      counter = 0;
+      userChoosenCard = "";
+      userChoosenCardSecond = "";
+    }
+    console.log(counter);
   });
 
   window.application.renderBlock("card", cards);
