@@ -87,7 +87,7 @@ body {
 }
 
 .content {
-  max-width: 975px;
+  width: 975px;
 }
 
 .content__top {
@@ -138,4 +138,52 @@ body {
 
 .card__item {
   border-radius: 4px;
+}
+
+.result__bcg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #004980;
+  opacity: 0.9;
+}
+
+.result__content {
+  position: absolute;
+  width: 480px;
+  background: #c2f5ff;
+  border-radius: 12px;
+  margin-top: 158px;
+  padding: 30px 0 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.result__title {
+  min-width: 276px;
+  margin-top: 5px;
+  margin-bottom: 28px;
+}
+
+.result__subtitle {
+  margin-bottom: 10px;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  color: #000000;
+}
+
+.result__time {
+  margin-bottom: 40px;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 72px;
+  color: #000000;
+}
+
+.result__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
