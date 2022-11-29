@@ -19,12 +19,19 @@ function resultBlock(container: Element, result: string) {
 
   const time = document.createElement("p");
   time.classList.add("result__time");
-  time.textContent = "01.20";
+  time.textContent = window.application.timerResult;
 
   const button = document.createElement("btn");
   button.classList.add("difficulty__button");
   button.classList.add("result__button");
   button.textContent = "Играть снова";
+
+  button.addEventListener("click", () => {
+    window.application.renderScreen("difficulty-screen");
+    window.application.timerCounterSec = 0;
+    window.application.timerCounterMin = 0;
+    window.application.timerResult = "";
+  });
 
   content.appendChild(img);
   content.appendChild(title);
@@ -48,12 +55,14 @@ function difficultyBlock(container: Element) {
   level.classList.add("difficulty__level");
 
   level.addEventListener("click", (event) => {
-    const target = (event.target as HTMLInputElement);
+    const target = event.target as HTMLInputElement;
     if (!target.dataset.value) {
       return;
     }
     window.application.difficulty = target.dataset.value;
-    const levels = document.querySelectorAll<HTMLElement>(".difficulty__level__item");
+    const levels = document.querySelectorAll<HTMLElement>(
+      ".difficulty__level__item"
+    );
     levels.forEach((level) => {
       if (level.dataset.value === window.application.difficulty) {
         level.classList.remove("difficulty__level__item_disabled");
@@ -114,6 +123,39 @@ function cardBack() {
   });
 }
 
+function setTimer(timerNumber: Element) {
+  let timerTextSec: string = "";
+  let timerTextMin: string = "";
+  let timerText: string = "";
+
+  if (window.application.timerCounterSec < 10) {
+    timerTextSec = "0" + String(window.application.timerCounterSec);
+  }
+
+  if (window.application.timerCounterSec >= 10) {
+    timerTextSec = String(window.application.timerCounterSec);
+  }
+
+  if (window.application.timerCounterSec === 60) {
+    window.application.timerCounterSec = 0;
+    timerTextSec = "0" + String(window.application.timerCounterSec);
+    window.application.timerCounterMin++;
+  }
+
+  if (window.application.timerCounterMin < 10) {
+    timerTextMin = "0" + String(window.application.timerCounterMin);
+  } else {
+    timerTextMin = String(window.application.timerCounterMin);
+  }
+
+  timerText = timerTextMin + "." + timerTextSec;
+  timerNumber.textContent = timerText;
+
+  window.application.timerResult = timerText;
+
+  window.application.timerCounterSec++;
+}
+
 function gameTopBlock(container: Element) {
   const timer = document.createElement("div");
   timer.classList.add("content__timer");
@@ -128,7 +170,8 @@ function gameTopBlock(container: Element) {
 
   const number = document.createElement("p");
   number.classList.add("timer__number");
-  number.textContent = "00.00";
+
+  window.application.timer = setInterval(setTimer, 500, number);
 
   timer.appendChild(min);
   timer.appendChild(sec);
@@ -137,6 +180,14 @@ function gameTopBlock(container: Element) {
   const button = document.createElement("button");
   button.classList.add("content__button");
   button.textContent = "Начать заново";
+
+  button.addEventListener("click", () => {
+    clearInterval(window.application.timer);
+    window.application.renderScreen("difficulty-screen");
+    window.application.timerCounterSec = 0;
+    window.application.timerCounterMin = 0;
+    window.application.timerResult = "";
+  });
 
   container.appendChild(timer);
   container.appendChild(button);
@@ -148,7 +199,44 @@ window.application.blocks["game-top"] = gameTopBlock;
 window.application.blocks["result"] = resultBlock;
 
 // eslint-disable-next-line prettier/prettier
-const CARDS = ["sa", "sk", "sq", "sj", "s10", "s9", "s8", "s7", "s6","ha", "hk", "hq", "hj", "h10", "h9", "h8", "h7", "h6", "da", "dk", "dq", "dj", "d10", "d9", "d8", "d7", "d6", "ca", "ck", "cq", "cj", "c10", "c9", "c8", "c7", "c6"];
+const CARDS = [
+  "sa",
+  "sk",
+  "sq",
+  "sj",
+  "s10",
+  "s9",
+  "s8",
+  "s7",
+  "s6",
+  "ha",
+  "hk",
+  "hq",
+  "hj",
+  "h10",
+  "h9",
+  "h8",
+  "h7",
+  "h6",
+  "da",
+  "dk",
+  "dq",
+  "dj",
+  "d10",
+  "d9",
+  "d8",
+  "d7",
+  "d6",
+  "ca",
+  "ck",
+  "cq",
+  "cj",
+  "c10",
+  "c9",
+  "c8",
+  "c7",
+  "c6",
+];
 
 function shuffle(array: string[]) {
   array.sort(() => Math.random() - 0.5);

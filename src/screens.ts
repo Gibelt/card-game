@@ -44,6 +44,7 @@ function renderGameScreen() {
       counter = 0;
       userChoosenCard = "";
       userChoosenCardSecond = "";
+      clearInterval(window.application.timer);
     }
   });
 

@@ -31,6 +31,10 @@ window.application = {
         window.application.blocks[blockName](container, result);
     },
 };
+window.application.timerCounterSec = 0;
+window.application.timerCounterMin = 0;
+window.application.timerResult = "";
+window.application.timer;
 
 
 /***/ }),
@@ -58,11 +62,17 @@ function resultBlock(container, result) {
     subTitle.textContent = "Затраченное время:";
     var time = document.createElement("p");
     time.classList.add("result__time");
-    time.textContent = "01.20";
+    time.textContent = window.application.timerResult;
     var button = document.createElement("btn");
     button.classList.add("difficulty__button");
     button.classList.add("result__button");
     button.textContent = "Играть снова";
+    button.addEventListener("click", function () {
+        window.application.renderScreen("difficulty-screen");
+        window.application.timerCounterSec = 0;
+        window.application.timerCounterMin = 0;
+        window.application.timerResult = "";
+    });
     content.appendChild(img);
     content.appendChild(title);
     content.appendChild(subTitle);
@@ -137,6 +147,32 @@ function cardBack() {
         card.removeAttribute("disabled");
     });
 }
+function setTimer(timerNumber) {
+    var timerTextSec = "";
+    var timerTextMin = "";
+    var timerText = "";
+    if (window.application.timerCounterSec < 10) {
+        timerTextSec = "0" + String(window.application.timerCounterSec);
+    }
+    if (window.application.timerCounterSec >= 10) {
+        timerTextSec = String(window.application.timerCounterSec);
+    }
+    if (window.application.timerCounterSec === 60) {
+        window.application.timerCounterSec = 0;
+        timerTextSec = "0" + String(window.application.timerCounterSec);
+        window.application.timerCounterMin++;
+    }
+    if (window.application.timerCounterMin < 10) {
+        timerTextMin = "0" + String(window.application.timerCounterMin);
+    }
+    else {
+        timerTextMin = String(window.application.timerCounterMin);
+    }
+    timerText = timerTextMin + "." + timerTextSec;
+    timerNumber.textContent = timerText;
+    window.application.timerResult = timerText;
+    window.application.timerCounterSec++;
+}
 function gameTopBlock(container) {
     var timer = document.createElement("div");
     timer.classList.add("content__timer");
@@ -148,13 +184,20 @@ function gameTopBlock(container) {
     sec.textContent = "sec";
     var number = document.createElement("p");
     number.classList.add("timer__number");
-    number.textContent = "00.00";
+    window.application.timer = setInterval(setTimer, 500, number);
     timer.appendChild(min);
     timer.appendChild(sec);
     timer.appendChild(number);
     var button = document.createElement("button");
     button.classList.add("content__button");
     button.textContent = "Начать заново";
+    button.addEventListener("click", function () {
+        clearInterval(window.application.timer);
+        window.application.renderScreen("difficulty-screen");
+        window.application.timerCounterSec = 0;
+        window.application.timerCounterMin = 0;
+        window.application.timerResult = "";
+    });
     container.appendChild(timer);
     container.appendChild(button);
 }
@@ -163,7 +206,44 @@ window.application.blocks["card"] = cardBlock;
 window.application.blocks["game-top"] = gameTopBlock;
 window.application.blocks["result"] = resultBlock;
 // eslint-disable-next-line prettier/prettier
-var CARDS = ["sa", "sk", "sq", "sj", "s10", "s9", "s8", "s7", "s6", "ha", "hk", "hq", "hj", "h10", "h9", "h8", "h7", "h6", "da", "dk", "dq", "dj", "d10", "d9", "d8", "d7", "d6", "ca", "ck", "cq", "cj", "c10", "c9", "c8", "c7", "c6"];
+var CARDS = [
+    "sa",
+    "sk",
+    "sq",
+    "sj",
+    "s10",
+    "s9",
+    "s8",
+    "s7",
+    "s6",
+    "ha",
+    "hk",
+    "hq",
+    "hj",
+    "h10",
+    "h9",
+    "h8",
+    "h7",
+    "h6",
+    "da",
+    "dk",
+    "dq",
+    "dj",
+    "d10",
+    "d9",
+    "d8",
+    "d7",
+    "d6",
+    "ca",
+    "ck",
+    "cq",
+    "cj",
+    "c10",
+    "c9",
+    "c8",
+    "c7",
+    "c6",
+];
 function shuffle(array) {
     array.sort(function () { return Math.random() - 0.5; });
 }
@@ -229,6 +309,7 @@ function renderGameScreen() {
             counter = 0;
             userChoosenCard = "";
             userChoosenCardSecond = "";
+            clearInterval(window.application.timer);
         }
     });
     window.application.renderBlock("card", cards);

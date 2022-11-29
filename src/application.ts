@@ -8,3 +8,8 @@ window.application = {
     window.application.blocks[blockName](container, result);
   },
 };
+
+window.application.timerCounterSec = 0;
+window.application.timerCounterMin = 0;
+window.application.timerResult = "";
+window.application.timer;
