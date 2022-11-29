@@ -1,4 +1,5 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/style/style.css":
@@ -7,235 +8,234 @@
   \*****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
 /***/ }),
 
-/***/ "./src/application.js":
+/***/ "./src/application.ts":
 /*!****************************!*\
-  !*** ./src/application.js ***!
+  !*** ./src/application.ts ***!
   \****************************/
 /***/ (() => {
 
+
 window.application = {
-  blocks: {},
-  screens: {},
-  renderScreen: function (screenName) {
-    window.application.screens[screenName]();
-  },
-  renderBlock: function (blockName, container) {
-    window.application.blocks[blockName](container);
-  },
+    blocks: {},
+    screens: {},
+    renderScreen: function (screenName) {
+        window.application.screens[screenName]();
+    },
+    renderBlock: function (blockName, container, result) {
+        window.application.blocks[blockName](container, result);
+    },
 };
 
 
 /***/ }),
 
-/***/ "./src/blocks.js":
+/***/ "./src/blocks.ts":
 /*!***********************!*\
-  !*** ./src/blocks.js ***!
+  !*** ./src/blocks.ts ***!
   \***********************/
 /***/ (() => {
 
+
 function resultBlock(container, result) {
-  const content = document.createElement("div");
-  content.classList.add("result__content");
-
-  const img = document.createElement("img");
-  
+    var resultBcg = document.createElement("div");
+    resultBcg.classList.add("result__bcg");
+    var content = document.createElement("div");
+    content.classList.add("result__content");
+    var img = document.createElement("img");
+    img.setAttribute("src", "static/" + result + ".svg");
+    var title = document.createElement("h2");
+    title.classList.add("result__title");
+    title.classList.add("difficulty__heading");
+    title.textContent = result === "success" ? "Вы выйграли!" : "Вы проиграли!";
+    var subTitle = document.createElement("p");
+    subTitle.classList.add("result__subtitle");
+    subTitle.textContent = "Затраченное время:";
+    var time = document.createElement("p");
+    time.classList.add("result__time");
+    time.textContent = "01.20";
+    var button = document.createElement("btn");
+    button.classList.add("difficulty__button");
+    button.classList.add("result__button");
+    button.textContent = "Играть снова";
+    content.appendChild(img);
+    content.appendChild(title);
+    content.appendChild(subTitle);
+    content.appendChild(time);
+    content.appendChild(button);
+    container.appendChild(resultBcg);
+    container.appendChild(content);
 }
-
 function difficultyBlock(container) {
-  const content = document.createElement("div");
-  content.classList.add("difficulty__content");
-
-  const heading = document.createElement("h2");
-  heading.textContent = "Выбери сложность";
-  heading.classList.add("difficulty__heading");
-
-  const level = document.createElement("div");
-  level.classList.add("difficulty__level");
-
-  level.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!target.dataset.value) {
-      return;
-    }
-    window.application.difficulty = target.dataset.value;
-    const levels = document.querySelectorAll(".difficulty__level__item");
-    levels.forEach((level) => {
-      if (level.dataset.value === window.application.difficulty) {
-        level.classList.remove("difficulty__level__item_disabled");
-      } else {
-        level.classList.add("difficulty__level__item_disabled");
-      }
+    var content = document.createElement("div");
+    content.classList.add("difficulty__content");
+    var heading = document.createElement("h2");
+    heading.textContent = "Выбери сложность";
+    heading.classList.add("difficulty__heading");
+    var level = document.createElement("div");
+    level.classList.add("difficulty__level");
+    level.addEventListener("click", function (event) {
+        var target = event.target;
+        if (!target.dataset.value) {
+            return;
+        }
+        window.application.difficulty = target.dataset.value;
+        var levels = document.querySelectorAll(".difficulty__level__item");
+        levels.forEach(function (level) {
+            if (level.dataset.value === window.application.difficulty) {
+                level.classList.remove("difficulty__level__item_disabled");
+            }
+            else {
+                level.classList.add("difficulty__level__item_disabled");
+            }
+        });
+        button.removeAttribute("disabled");
     });
-    button.removeAttribute("disabled");
-  });
-
-  for (let i = 1; i < 4; i++) {
-    const number = document.createElement("div");
-    number.textContent = i;
-    number.classList.add("difficulty__level__item");
-    number.setAttribute("data-value", i);
-    level.appendChild(number);
-  }
-
-  const button = document.createElement("button");
-  button.textContent = "Старт";
-  button.classList.add("difficulty__button");
-  button.setAttribute("disabled", "disabled");
-
-  button.addEventListener("click", () => {
-    window.application.renderScreen("game-screen");
-  });
-
-  content.appendChild(heading);
-  content.appendChild(level);
-  content.appendChild(button);
-
-  container.appendChild(content);
+    for (var i = 1; i < 4; i++) {
+        var number = document.createElement("div");
+        number.textContent = String(i);
+        number.classList.add("difficulty__level__item");
+        number.setAttribute("data-value", String(i));
+        level.appendChild(number);
+    }
+    var button = document.createElement("button");
+    button.textContent = "Старт";
+    button.classList.add("difficulty__button");
+    button.setAttribute("disabled", "disabled");
+    button.addEventListener("click", function () {
+        window.application.renderScreen("game-screen");
+    });
+    content.appendChild(heading);
+    content.appendChild(level);
+    content.appendChild(button);
+    container.appendChild(content);
 }
-
 function cardBlock(container) {
-  shuffle(CARDS);
-  let randomArr = CARDS.slice(0, window.application.difficulty * 3);
-  let gameArr = randomArr.concat(randomArr);
-  shuffle(gameArr);
-
-  for (let i = 0; i < gameArr.length; i++) {
-    const img = document.createElement("img");
-    img.classList.add("card__item");
-    img.setAttribute("src", "static/" + gameArr[i] + ".jpg");
-    img.setAttribute("data-value", gameArr[i]);
-    container.appendChild(img);
-  }
-
-  setTimeout(cardBack, 2000);
+    shuffle(CARDS);
+    var randomArr = CARDS.slice(0, window.application.difficulty * 3);
+    var gameArr = randomArr.concat(randomArr);
+    shuffle(gameArr);
+    for (var i = 0; i < gameArr.length; i++) {
+        var img = document.createElement("img");
+        img.setAttribute("disabled", "disabled");
+        img.classList.add("card__item");
+        img.setAttribute("src", "static/" + gameArr[i] + ".jpg");
+        img.setAttribute("data-value", gameArr[i]);
+        container.appendChild(img);
+    }
+    setTimeout(cardBack, 5000);
 }
-
 function cardBack() {
-  const cards = document.querySelectorAll(".card__item");
-  cards.forEach((card) => {
-    card.setAttribute("src", "static/back-of-card.jpg");
-  });
+    var cards = document.querySelectorAll(".card__item");
+    cards.forEach(function (card) {
+        card.setAttribute("src", "static/back-of-card.jpg");
+        card.removeAttribute("disabled");
+    });
 }
-
 function gameTopBlock(container) {
-  const timer = document.createElement("div");
-  timer.classList.add("content__timer");
-
-  const min = document.createElement("p");
-  min.classList.add("timer__text");
-  min.textContent = "min";
-
-  const sec = document.createElement("p");
-  sec.classList.add("timer__text");
-  sec.textContent = "sec";
-
-  const number = document.createElement("p");
-  number.classList.add("timer__number");
-  number.textContent = "00.00";
-
-  timer.appendChild(min);
-  timer.appendChild(sec);
-  timer.appendChild(number);
-
-  const button = document.createElement("button");
-  button.classList.add("content__button");
-  button.textContent = "Начать заново";
-
-  container.appendChild(timer);
-  container.appendChild(button);
+    var timer = document.createElement("div");
+    timer.classList.add("content__timer");
+    var min = document.createElement("p");
+    min.classList.add("timer__text");
+    min.textContent = "min";
+    var sec = document.createElement("p");
+    sec.classList.add("timer__text");
+    sec.textContent = "sec";
+    var number = document.createElement("p");
+    number.classList.add("timer__number");
+    number.textContent = "00.00";
+    timer.appendChild(min);
+    timer.appendChild(sec);
+    timer.appendChild(number);
+    var button = document.createElement("button");
+    button.classList.add("content__button");
+    button.textContent = "Начать заново";
+    container.appendChild(timer);
+    container.appendChild(button);
 }
-
 window.application.blocks["difficulty"] = difficultyBlock;
 window.application.blocks["card"] = cardBlock;
 window.application.blocks["game-top"] = gameTopBlock;
 window.application.blocks["result"] = resultBlock;
-
 // eslint-disable-next-line prettier/prettier
-const CARDS = ["sa", "sk", "sq", "sj", "s10", "s9", "s8", "s7", "s6","ha", "hk", "hq", "hj", "h10", "h9", "h8", "h7", "h6", "da", "dk", "dq", "dj", "d10", "d9", "d8", "d7", "d6", "ca", "ck", "cq", "cj", "c10", "c9", "c8", "c7", "c6"];
-
+var CARDS = ["sa", "sk", "sq", "sj", "s10", "s9", "s8", "s7", "s6", "ha", "hk", "hq", "hj", "h10", "h9", "h8", "h7", "h6", "da", "dk", "dq", "dj", "d10", "d9", "d8", "d7", "d6", "ca", "ck", "cq", "cj", "c10", "c9", "c8", "c7", "c6"];
 function shuffle(array) {
-  array.sort(() => Math.random() - 0.5);
+    array.sort(function () { return Math.random() - 0.5; });
 }
 
 
 /***/ }),
 
-/***/ "./src/run.js":
+/***/ "./src/run.ts":
 /*!********************!*\
-  !*** ./src/run.js ***!
+  !*** ./src/run.ts ***!
   \********************/
 /***/ (() => {
+
 
 window.application.renderScreen("difficulty-screen");
 
 
 /***/ }),
 
-/***/ "./src/screens.js":
+/***/ "./src/screens.ts":
 /*!************************!*\
-  !*** ./src/screens.js ***!
+  !*** ./src/screens.ts ***!
   \************************/
 /***/ (() => {
 
+
 function renderDifficultyScreen() {
-  const app = document.querySelector(".app");
-  app.innerHTML = "";
-  window.application.renderBlock("difficulty", app);
+    var app = document.querySelector(".app");
+    app.innerHTML = "";
+    window.application.renderBlock("difficulty", app);
 }
-
 function renderGameScreen() {
-  let counter = 0;
-  let userChoosenCard = "";
-  let userChoosenCardSecond = "";
-  const app = document.querySelector(".app");
-  app.innerHTML = "";
-
-  const content = document.createElement("div");
-  content.classList.add("content");
-
-  const top = document.createElement("div");
-  top.classList.add("content__top");
-
-  window.application.renderBlock("game-top", top);
-
-  const cards = document.createElement("div");
-  cards.classList.add("content__cards");
-
-  cards.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!target.dataset.value) {
-      return;
-    }
-    target.setAttribute("src", "static/" + target.dataset.value + ".jpg");
-    if (counter === 0) {
-      userChoosenCard = target.dataset.value;
-    } else if (counter === 1) {
-      userChoosenCardSecond = target.dataset.value;
-      userChoosenCard === userChoosenCardSecond ? renderSucces() : renderLoose();
-      counter = 0;
-      userChoosenCard = "";
-      userChoosenCardSecond = "";
-    }
-  });
-
-  window.application.renderBlock("card", cards);
-
-  content.appendChild(top);
-  content.appendChild(cards);
-  app.appendChild(content);
+    var counter = 0;
+    var userChoosenCard = "";
+    var userChoosenCardSecond = "";
+    var app = document.querySelector(".app");
+    app.innerHTML = "";
+    var content = document.createElement("div");
+    content.classList.add("content");
+    var top = document.createElement("div");
+    top.classList.add("content__top");
+    window.application.renderBlock("game-top", top);
+    var cards = document.createElement("div");
+    cards.classList.add("content__cards");
+    cards.addEventListener("click", function (event) {
+        var target = event.target;
+        if (!target.dataset.value ||
+            target.dataset.value === "x" ||
+            target.getAttribute("disabled")) {
+            return;
+        }
+        target.setAttribute("src", "static/" + target.dataset.value + ".jpg");
+        if (counter === 0) {
+            userChoosenCard = target.dataset.value;
+            target.dataset.value = "x";
+            counter++;
+        }
+        else if (counter === 1) {
+            userChoosenCardSecond = target.dataset.value;
+            userChoosenCard === userChoosenCardSecond
+                ? window.application.renderBlock("result", app, "success")
+                : window.application.renderBlock("result", app, "loose");
+            counter = 0;
+            userChoosenCard = "";
+            userChoosenCardSecond = "";
+        }
+    });
+    window.application.renderBlock("card", cards);
+    content.appendChild(top);
+    content.appendChild(cards);
+    app.appendChild(content);
 }
-
-function render() {
-
-}
-
 window.application.screens["difficulty-screen"] = renderDifficultyScreen;
 window.application.screens["game-screen"] = renderGameScreen;
 
@@ -311,20 +311,19 @@ window.application.screens["game-screen"] = renderGameScreen;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
 /*!**********************!*\
-  !*** ./src/index.js ***!
+  !*** ./src/index.ts ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _application__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./application */ "./src/application.js");
+/* harmony import */ var _application__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./application */ "./src/application.ts");
 /* harmony import */ var _application__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_application__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _screens__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./screens */ "./src/screens.js");
+/* harmony import */ var _screens__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./screens */ "./src/screens.ts");
 /* harmony import */ var _screens__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_screens__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./blocks */ "./src/blocks.js");
+/* harmony import */ var _blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./blocks */ "./src/blocks.ts");
 /* harmony import */ var _blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_blocks__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _run__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./run */ "./src/run.js");
+/* harmony import */ var _run__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./run */ "./src/run.ts");
 /* harmony import */ var _run__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_run__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _style_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style/style.css */ "./src/style/style.css");
 

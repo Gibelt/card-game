@@ -1,5 +1,4 @@
-function resultBlock(container, result) {
-  console.log(result);
+function resultBlock(container: Element, result: string) {
   const resultBcg = document.createElement("div");
   resultBcg.classList.add("result__bcg");
 
@@ -37,7 +36,7 @@ function resultBlock(container, result) {
   container.appendChild(content);
 }
 
-function difficultyBlock(container) {
+function difficultyBlock(container: Element) {
   const content = document.createElement("div");
   content.classList.add("difficulty__content");
 
@@ -49,12 +48,12 @@ function difficultyBlock(container) {
   level.classList.add("difficulty__level");
 
   level.addEventListener("click", (event) => {
-    const target = event.target;
+    const target = (event.target as HTMLInputElement);
     if (!target.dataset.value) {
       return;
     }
     window.application.difficulty = target.dataset.value;
-    const levels = document.querySelectorAll(".difficulty__level__item");
+    const levels = document.querySelectorAll<HTMLElement>(".difficulty__level__item");
     levels.forEach((level) => {
       if (level.dataset.value === window.application.difficulty) {
         level.classList.remove("difficulty__level__item_disabled");
@@ -67,9 +66,9 @@ function difficultyBlock(container) {
 
   for (let i = 1; i < 4; i++) {
     const number = document.createElement("div");
-    number.textContent = i;
+    number.textContent = String(i);
     number.classList.add("difficulty__level__item");
-    number.setAttribute("data-value", i);
+    number.setAttribute("data-value", String(i));
     level.appendChild(number);
   }
 
@@ -89,7 +88,7 @@ function difficultyBlock(container) {
   container.appendChild(content);
 }
 
-function cardBlock(container) {
+function cardBlock(container: Element) {
   shuffle(CARDS);
   let randomArr = CARDS.slice(0, window.application.difficulty * 3);
   let gameArr = randomArr.concat(randomArr);
@@ -115,7 +114,7 @@ function cardBack() {
   });
 }
 
-function gameTopBlock(container) {
+function gameTopBlock(container: Element) {
   const timer = document.createElement("div");
   timer.classList.add("content__timer");
 
@@ -151,6 +150,6 @@ window.application.blocks["result"] = resultBlock;
 // eslint-disable-next-line prettier/prettier
 const CARDS = ["sa", "sk", "sq", "sj", "s10", "s9", "s8", "s7", "s6","ha", "hk", "hq", "hj", "h10", "h9", "h8", "h7", "h6", "da", "dk", "dq", "dj", "d10", "d9", "d8", "d7", "d6", "ca", "ck", "cq", "cj", "c10", "c9", "c8", "c7", "c6"];
 
-function shuffle(array) {
+function shuffle(array: string[]) {
   array.sort(() => Math.random() - 0.5);
 }

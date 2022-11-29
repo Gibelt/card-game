@@ -1,5 +1,5 @@
 function renderDifficultyScreen() {
-  const app = document.querySelector(".app");
+  const app: HTMLElement = document.querySelector(".app")!;
   app.innerHTML = "";
   window.application.renderBlock("difficulty", app);
 }
@@ -8,7 +8,7 @@ function renderGameScreen() {
   let counter = 0;
   let userChoosenCard = "";
   let userChoosenCardSecond = "";
-  const app = document.querySelector(".app");
+  const app = document.querySelector(".app")!;
   app.innerHTML = "";
 
   const content = document.createElement("div");
@@ -23,7 +23,7 @@ function renderGameScreen() {
   cards.classList.add("content__cards");
 
   cards.addEventListener("click", (event) => {
-    const target = event.target;
+    const target = (event.target as HTMLInputElement);
     if (
       !target.dataset.value ||
       target.dataset.value === "x" ||
@@ -45,7 +45,6 @@ function renderGameScreen() {
       userChoosenCard = "";
       userChoosenCardSecond = "";
     }
-    console.log(counter);
   });
 
   window.application.renderBlock("card", cards);
